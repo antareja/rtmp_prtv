@@ -1,0 +1,19 @@
+version: "3"
+
+rtmp:
+  image: alfg/nginx-rtmp
+    ports:
+      - "1903:1935"
+      - "8003:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:prtv-backup"
+
+  traefik:
+    image: traefik
+    command: --api
+      - "801:80" # The HTTP port
+      - "802:8080" # The web UI
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.toml:/traefik.toml
